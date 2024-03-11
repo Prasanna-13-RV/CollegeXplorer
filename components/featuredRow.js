@@ -6,15 +6,15 @@ import {getFeaturedResturantById} from '../api';
 import * as Icon from 'react-native-feather';
 import {themeColors} from '../theme';
 
-export default function FeatureRow({id, title, description, resturants}) {
+export default function FeatureRow({title, description, items}) {
   // const [resturants, setResturants] = useState([]);
 
-  useEffect(() => {
+  // useEffect(() => {
     // getFeaturedResturantById(id).then(data=>{
     //   // console.log('got data: ',data);
     //   setResturants(data?.resturants);
     // })
-  }, [id]);
+  // }, [id]);
   // console.log(id, title, description, resturants);
 
   return (
@@ -39,20 +39,20 @@ export default function FeatureRow({id, title, description, resturants}) {
           paddingHorizontal: 15,
         }}
         className="overflow-visible py-5">
-        {resturants.map(resturant => {
+        {items.map(item => {
+          console.log(item);
           return (
             <ResturantCard
-              key={resturant._id}
-              id={resturant._id}
-              imgUrl={resturant.image}
-              title={resturant.name}
-              rating={resturant.rating}
-              type={resturant.type?.name}
-              address="123 main street"
-              description={resturant.description}
-              dishes={resturant.dishes}
-              lng={resturant.lng}
-              lat={resturant.lat}
+             
+              id={item._id}
+              imgUrl={item.shopImage}
+              title={item.name}
+              // rating={resturant.rating}
+              // type={resturant.type?.name}
+              address={item.loc}
+              description={item.description}
+              dishes={item.products}
+           
             />
           );
         })}

@@ -14,13 +14,31 @@ import FeatureRow from '../../components/featuredRow';
 // import { getFeaturedResturants } from '../api';
 import * as Icon from 'react-native-feather';
 import {themeColors} from '../../theme';
-
+import { getShops } from '../../axios/shop';
 export default function HomeScreen() {
   const [featuredCategories, setFeaturedCategories] = useState([]);
+const [snacks, setSnacks] = useState([]);
+const [lunch, setLunch] = useState([]);
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({headerShown: false});
   }, []);
+  useEffect(()=>{
+      getShops().then(res=>{
+
+        
+        const filteredSnacks = res.data.filter(item => {
+          return item.products.some(product => product.productType == 'snacks');      
+      });
+      setSnacks(filteredSnacks)
+      getShops().then(res=>{
+        const filteredLunch = res.data.filter(item => {
+          return item.products.some(product => product.productType == 'lunch');      });
+      setLunch(filteredLunch);
+
+      })
+  })
+},[])
   useEffect(() => {
     const categories = [
       {
@@ -120,6 +138,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView className="bg-white">
+      
       <StatusBar barStyle="dark-content" />
       {/* search bar */}
       <View className="flex-row items-center space-x-2 px-4 pb-2 ">
@@ -156,20 +175,28 @@ export default function HomeScreen() {
         {/* categories */}
         <Categories />
 
+
         {/* featured */}
         <View className="mt-5">
-          {featuredCategories?.map(category => {
-            return (
+          
+           
               <FeatureRow
-                key={category._id}
-                id={category._id}
-                title={category.name}
-                resturants={category?.resturants}
-                description={category.description}
-                featuredCategory={category._type}
+                
+               
+                title={"Snacks"}
+                items={snacks}
+                description={"category.description"}
+                
               />
-            );
-          })}
+               <FeatureRow
+                
+            
+                title={"Lunch"}
+                items={lunch}
+                description={"category.description"}
+              />
+            
+          
         </View>
       </ScrollView>
     </SafeAreaView>

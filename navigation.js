@@ -14,14 +14,19 @@ import StationeryShopScreen from './screens/stationery/StationeryShopScreen';
 import BottomTabNavigator, {MyTabBar} from './screens/navigation/MyTabBar';
 import Maps from './screens/attendance/Maps';
 import Selfie from './screens/attendance/Selfie';
+import LoginScreenStudent from './screens/auth/LoginScreenStudent';
 
 const Stack = createNativeStackNavigator();
 
 export default function Navigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="BottomTabNavigator">
+      <Stack.Navigator initialRouteName="Login">
       <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} options={{headerShown: false}} />
+
+        {/* auth */}
+        <Stack.Screen name="Login" component={LoginScreenStudent} />
+
         {/* food */}
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Resturant" component={ResturantScreen} />

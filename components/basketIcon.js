@@ -29,7 +29,7 @@ export default function BasketIcon() {
           View Cart
         </Text>
         <Text className="font-extrabold text-white text-lg">
-          ${basketTotal}
+        ₹{basketTotal}
         </Text>
       </TouchableOpacity>
     </View>

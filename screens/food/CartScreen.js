@@ -18,13 +18,15 @@ import {useNavigation} from '@react-navigation/native';
 // import { urlFor } from '../sanity';
 import * as Icon from 'react-native-feather';
 import {themeColors} from '../../theme';
+import { createOrder } from '../../axios/shop';
+import { selectUser } from '../../slices/userSlice';
 
 export default function BasketScreen() {
   const resturant = useSelector(selectResturant);
   const [groupedItems, setGroupedItems] = useState([]);
   const basketItems = useSelector(selectBasketItems);
   const basketTotal = useSelector(selectBasketTotal);
-
+  const user = useSelector(selectUser)
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const deliveryFee = 2;
@@ -38,8 +40,21 @@ export default function BasketScreen() {
       return group;
     }, {});
     setGroupedItems(gItems);
-    // console.log('items: ',gItems);
+    // createOrder()
+    
   }, [basketItems]);
+  const makeOrder = () => {
+    let result = [];
+    for (let key in groupedItems) {
+      if (groupedItems.hasOwnProperty(key)) {
+        result.push({product: key, quantity: groupedItems[key].length});
+      }
+    }
+
+    createOrder(user._id, result).then(res => {
+      navigation.navigate('PreparingOrder');
+    });
+  };
 
   return (
     <View className=" bg-white flex-1">
@@ -96,7 +111,7 @@ export default function BasketScreen() {
                 {items[0]?.name}
               </Text>
               <Text className="font-semibold text-base">
-                ${items[0]?.price}
+              ₹{items[0]?.price}
               </Text>
               <TouchableOpacity
                 className="p-1 rounded-full"
@@ -119,20 +134,20 @@ export default function BasketScreen() {
         className=" p-6 px-8 rounded-t-3xl space-y-4">
         <View className="flex-row justify-between">
           <Text className="text-gray-700">Subtotal</Text>
-          <Text className="text-gray-700">${basketTotal}</Text>
+          <Text className="text-gray-700">₹{basketTotal}</Text>
         </View>
         <View className="flex-row justify-between">
           <Text className="text-gray-700">Delivery Fee</Text>
-          <Text className="text-gray-700">${deliveryFee}</Text>
+          <Text className="text-gray-700">₹{deliveryFee}</Text>
         </View>
         <View className="flex-row justify-between">
           <Text className="font-extrabold">Order Total</Text>
-          <Text className="font-extrabold">${basketTotal + deliveryFee}</Text>
+          <Text className="font-extrabold">₹{basketTotal + deliveryFee}</Text>
         </View>
         <View>
           <TouchableOpacity
             style={{backgroundColor: themeColors.bgColor(1)}}
-            onPress={() => navigation.navigate('PreparingOrder')}
+            onPress={() =>makeOrder()}
             className="p-3 rounded-full">
             <Text className="text-white text-center font-bold text-lg">
               Place Order

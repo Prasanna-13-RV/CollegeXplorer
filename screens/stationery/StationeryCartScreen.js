@@ -93,7 +93,7 @@ export default function StationeryCartScreen() {
                 {items[0]?.name}
               </Text>
               <Text className="font-semibold text-base">
-                ${items[0]?.price}
+              ₹{items[0]?.price}
               </Text>
               <TouchableOpacity
                 className="p-1 rounded-full"
@@ -116,15 +116,15 @@ export default function StationeryCartScreen() {
         className=" p-6 px-8 rounded-t-3xl space-y-4">
         <View className="flex-row justify-between">
           <Text className="text-gray-700">Subtotal</Text>
-          <Text className="text-gray-700">${basketTotal}</Text>
+          <Text className="text-gray-700">₹{basketTotal}</Text>
         </View>
         <View className="flex-row justify-between">
           <Text className="text-gray-700">Delivery Fee</Text>
-          <Text className="text-gray-700">${deliveryFee}</Text>
+          <Text className="text-gray-700">₹{deliveryFee}</Text>
         </View>
         <View className="flex-row justify-between">
           <Text className="font-extrabold">Order Total</Text>
-          <Text className="font-extrabold">${basketTotal + deliveryFee}</Text>
+          <Text className="font-extrabold">₹{basketTotal + deliveryFee}</Text>
         </View>
         <View>
           <TouchableOpacity

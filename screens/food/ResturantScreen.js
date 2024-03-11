@@ -25,13 +25,11 @@ export default function ResturantScreen() {
       id,
       title,
       imgUrl,
-      rating,
-      type,
+     
       address,
       description,
-      dishes,
-      lng,
-      lat,
+      dishes
+     
     },
   } = useRoute();
   useLayoutEffect(() => {
@@ -46,13 +44,11 @@ export default function ResturantScreen() {
         id,
         title,
         imgUrl,
-        rating,
-        type,
+       
         address,
         description,
-        dishes,
-        lng,
-        lat,
+        dishes
+       
       }),
     );
   }, []);
@@ -94,11 +90,11 @@ export default function ResturantScreen() {
                 {/* <Image 
                                 source={require('../assets/images/fullStar.png')} 
                                 className="h-4 w-4" /> */}
-                <Text className="text-xs">
+                {/* <Text className="text-xs">
                   <Text className="text-green-700">{rating}</Text>
                   <Text className="text-gray-700"> (4.6k review)</Text> ·{' '}
                   <Text className="font-semibold text-gray-700">{type}</Text>
-                </Text>
+                </Text> */}
               </View>
               <View className="flex-row items-center space-x-1">
                 <Icon.MapPin color="gray" width={15} height={15} />
@@ -120,10 +116,10 @@ export default function ResturantScreen() {
               <DishRow
                 key={dish._id}
                 id={dish._id}
-                name={dish.name}
-                description={dish.description}
-                price={dish.price}
-                image={dish.image}
+                name={dish.productName}
+                description={dish.productDescription}
+                price={dish.productPrice}
+                image={dish.productImage}
               />
             );
           })}
