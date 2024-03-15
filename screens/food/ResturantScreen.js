@@ -44,7 +44,7 @@ export default function ResturantScreen() {
         id,
         title,
         imgUrl,
-       
+        
         address,
         description,
         dishes
@@ -115,6 +115,7 @@ export default function ResturantScreen() {
             return (
               <DishRow
                 key={dish._id}
+                shop={dish.shop}
                 id={dish._id}
                 name={dish.productName}
                 description={dish.productDescription}

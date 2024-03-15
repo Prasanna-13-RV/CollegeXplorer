@@ -15,6 +15,9 @@ import BottomTabNavigator, {MyTabBar} from './screens/navigation/MyTabBar';
 import Maps from './screens/attendance/Maps';
 import Selfie from './screens/attendance/Selfie';
 import LoginScreenStudent from './screens/auth/LoginScreenStudent';
+import {SignupScreenStudent} from './screens/auth/SignupScreenStudent';
+
+import { OrderScreen } from './screens/food/OrderScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -26,6 +29,7 @@ export default function Navigation() {
 
         {/* auth */}
         <Stack.Screen name="Login" component={LoginScreenStudent} />
+        <Stack.Screen name="Signup" component={SignupScreenStudent} />
 
         {/* food */}
         <Stack.Screen name="Home" component={HomeScreen} />
@@ -40,6 +44,8 @@ export default function Navigation() {
           options={{presentation: 'fullScreenModal', headerShown: false}}
           component={PreparingOrderScreen}
         />
+        <Stack.Screen name="Orders" component={OrderScreen} />
+
         <Stack.Screen
           name="Delivery"
           options={{presentation: 'fullScreenModal', headerShown: false}}

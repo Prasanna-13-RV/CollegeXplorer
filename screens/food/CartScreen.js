@@ -29,7 +29,7 @@ export default function BasketScreen() {
   const user = useSelector(selectUser)
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const deliveryFee = 2;
+
   useMemo(() => {
     const gItems = basketItems.reduce((group, item) => {
       if (group[item.id]) {
@@ -39,27 +39,31 @@ export default function BasketScreen() {
       }
       return group;
     }, {});
+    console.log(gItems);
     setGroupedItems(gItems);
     // createOrder()
     
   }, [basketItems]);
   const makeOrder = () => {
     let result = [];
+
     for (let key in groupedItems) {
       if (groupedItems.hasOwnProperty(key)) {
         result.push({product: key, quantity: groupedItems[key].length});
       }
+      
     }
-
-    createOrder(user._id, result).then(res => {
+    const prodId = Object.keys(groupedItems)[0];
+    const shop = groupedItems[prodId][0].shop;
+    createOrder(user._id, result,shop).then(res => {
       navigation.navigate('PreparingOrder');
     });
   };
-
+  
   return (
     <View className=" bg-white flex-1">
       {/* top button */}
-      <View className="relative py-4 shadow-sm">
+      <View className="relative py-4 shadow-sm"> 
         <TouchableOpacity
           style={{backgroundColor: themeColors.bgColor(1)}}
           onPress={navigation.goBack}
@@ -136,13 +140,10 @@ export default function BasketScreen() {
           <Text className="text-gray-700">Subtotal</Text>
           <Text className="text-gray-700">₹{basketTotal}</Text>
         </View>
-        <View className="flex-row justify-between">
-          <Text className="text-gray-700">Delivery Fee</Text>
-          <Text className="text-gray-700">₹{deliveryFee}</Text>
-        </View>
+        
         <View className="flex-row justify-between">
           <Text className="font-extrabold">Order Total</Text>
-          <Text className="font-extrabold">₹{basketTotal + deliveryFee}</Text>
+          <Text className="font-extrabold">₹{basketTotal}</Text>
         </View>
         <View>
           <TouchableOpacity

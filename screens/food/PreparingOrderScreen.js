@@ -8,7 +8,7 @@ export default function PreparingOrderScreen() {
   const navigation = useNavigation();
   useEffect(() => {
     setTimeout(() => {
-      navigation.navigate('Delivery');
+      navigation.navigate('Orders');
     }, 3000);
   }, []);
   return (

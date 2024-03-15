@@ -30,14 +30,15 @@ const [lunch, setLunch] = useState([]);
         const filteredSnacks = res.data.filter(item => {
           return item.products.some(product => product.productType == 'snacks');      
       });
+      console.log(filteredSnacks,"sssssssss");
       setSnacks(filteredSnacks)
-      getShops().then(res=>{
+      
         const filteredLunch = res.data.filter(item => {
           return item.products.some(product => product.productType == 'lunch');      });
       setLunch(filteredLunch);
 
       })
-  })
+  
 },[])
   useEffect(() => {
     const categories = [
@@ -154,7 +155,7 @@ const [lunch, setLunch] = useState([]);
             <Text className="text-gray-600">CIT</Text>
           </View>
         </View>
-        <View
+        {/* <View
           style={{backgroundColor: themeColors.bgColor(1)}}
           className="p-3 rounded-full">
           <Icon.Sliders
@@ -163,7 +164,7 @@ const [lunch, setLunch] = useState([]);
             strokeWidth="2.5"
             stroke="white"
           />
-        </View>
+        </View> */}
       </View>
 
       {/* main */}
@@ -173,7 +174,7 @@ const [lunch, setLunch] = useState([]);
           paddingBottom: 50,
         }}>
         {/* categories */}
-        <Categories />
+        {/* <Categories /> */}
 
 
         {/* featured */}
@@ -185,7 +186,7 @@ const [lunch, setLunch] = useState([]);
                
                 title={"Snacks"}
                 items={snacks}
-                description={"category.description"}
+                description={"Snack items are availble in these shops"}
                 
               />
                <FeatureRow
@@ -193,7 +194,7 @@ const [lunch, setLunch] = useState([]);
             
                 title={"Lunch"}
                 items={lunch}
-                description={"category.description"}
+                description={"Lunch items are availble in these shops"}
               />
             
           

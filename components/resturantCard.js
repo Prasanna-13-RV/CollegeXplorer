@@ -19,8 +19,7 @@ export default function ResturantCard({
   imgUrl,
   address,
   description,
-  dishes
-  
+  dishes,
 }) {
   // console.log(id,
   //   title,
@@ -41,22 +40,21 @@ export default function ResturantCard({
           id,
           title,
           imgUrl,
-         
+
           address,
           description,
-          dishes
-          
+          dishes,
         });
       }}>
       <View
         style={{shadowColor: themeColors.bgColor(0.2), shadowRadius: 7}}
-        className="mr-6 bg-white rounded-3xl shadow-lg">
-        <Image className="h-36 w-64 rounded-t-3xl" source={{uri: imgUrl}} />
+        className=" bg-white rounded-3xl shadow-lg">
+        <Image className="h-36 w-[90%] rounded-t-3xl" source={{uri: imgUrl}} />
 
         <View className="px-3 pb-4 space-y-2">
           <Text className="text-lg text-gray-900 font-bold pt-2">{title}</Text>
           <View className="flex-row items-center space-x-1">
-           {/* <Image source={require('../assets/images/fullStar.png')} className="h-4 w-4" /> */}
+            {/* <Image source={require('../assets/images/fullStar.png')} className="h-4 w-4" /> */}
             {/* <Text className="text-xs">
               <Text className="text-green-700">{rating}</Text>
               <Text className= "text-gray-700"> ({reviews} review)</Text> ·{' '}

@@ -16,14 +16,17 @@ const LoginScreenStudent = () => {
   return (
     <LoginScreen
   // logoImageSource={require('./assets/logo-example.png')}
-  onLoginPress={() => {
+  onLoginPress={() => { 
+    console.log("res.data");
     getUser(username,password).then((res)=>{
-     
+      console.log(res.data);
       dispatch(
         setUser({
           _id:res.data._id,
          name:res.data.name,
-         email:res.data.email
+         email:res.data.email,
+         registerNumber:res.data.registerNumber,
+         className:res.data.className
          
         }),
       );
@@ -31,18 +34,8 @@ const LoginScreenStudent = () => {
     })
   }}
   onSignupPress={() => {
-    createUser(username,password).then((res)=>{
-      dispatch(
-        setUser({
-          _id:res.data._id,
-         name:res.data.name,
-         email:res.data.email
-         
-        }),
-      );
-      navigation.navigate("BottomTabNavigator")
+    navigation.navigate("Signup")
 
-    })
   }}
   onEmailChange={setUsername}
   loginButtonText={'Login'}

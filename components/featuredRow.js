@@ -10,10 +10,10 @@ export default function FeatureRow({title, description, items}) {
   // const [resturants, setResturants] = useState([]);
 
   // useEffect(() => {
-    // getFeaturedResturantById(id).then(data=>{
-    //   // console.log('got data: ',data);
-    //   setResturants(data?.resturants);
-    // })
+  // getFeaturedResturantById(id).then(data=>{
+  //   // console.log('got data: ',data);
+  //   setResturants(data?.resturants);
+  // })
   // }, [id]);
   // console.log(id, title, description, resturants);
 
@@ -25,25 +25,17 @@ export default function FeatureRow({title, description, items}) {
           <Text className="text-gray-900 text-xs">{description}</Text>
         </View>
 
-        <TouchableOpacity>
-          <Text style={{color: themeColors.text}} className="font-semibold">
-            See All
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: 15,
+          paddingVertical: 15,
         }}
-        className="overflow-visible py-5">
+        className="overflow-visible px-5">
         {items.map(item => {
           console.log(item);
           return (
             <ResturantCard
-             
               id={item._id}
               imgUrl={item.shopImage}
               title={item.name}
@@ -52,7 +44,6 @@ export default function FeatureRow({title, description, items}) {
               address={item.loc}
               description={item.description}
               dishes={item.products}
-           
             />
           );
         })}

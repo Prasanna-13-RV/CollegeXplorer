@@ -9,7 +9,12 @@ export const basketSlice = createSlice({
   initialState,
   reducers: {
     addToBasket: (state, action) => {
-      state.items = [...state.items, action.payload];
+      const isSameShop = state.items.every(item => item.shop == action.payload.shop);
+
+      // If either there are no items in the cart or the shop ID matches, add the item to the cart
+      if (state.items.length === 0 || isSameShop) {
+          state.items = [...state.items, action.payload];
+      }
     },
     removeFromBasket: (state, action) => {
       let newBasket = [...state.items];

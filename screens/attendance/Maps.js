@@ -1,6 +1,9 @@
 import {View, Text, Image, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {useDispatch, useSelector} from 'react-redux';
+import { selectUser } from '../../slices/userSlice';
+import { createAttendance } from '../../axios/shop';
 
 const Maps = ({route}) => {
   const [message, setMessage] = useState('Student outside the college');
@@ -8,6 +11,7 @@ const Maps = ({route}) => {
   const latitude = route.params.latitude;
   const longitude = route.params.longitude;
   const picture = route.params.picture;
+  const user = useSelector(selectUser)
 
   // 13.0443321 80.1374166
 
@@ -20,9 +24,15 @@ const Maps = ({route}) => {
       longitude < -122
     ) {
       setMessage('Student inside the college');
+      createAttendance(user._id,true,picture)
+    
     } else {
       setMessage('Student outside the college');
+      createAttendance(user._id,false,picture)
+
     }
+
+
   };
 
   useEffect(() => {
