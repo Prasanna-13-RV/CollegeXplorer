@@ -26,10 +26,8 @@ export const OrderScreen = () => {
       () => {
         navigation.navigate('BottomTabNavigator');
         return true; // Prevent default back button behavior
-      }
+      },
     );
-
-
 
     getOrders(user._id).then(res => {
       console.log(res.data[1].items);
@@ -37,37 +35,35 @@ export const OrderScreen = () => {
     });
     return () => backHandler.remove();
   }, []);
-  
-  const doPayment = (id,amount) => {
-    
+
+  const doPayment = (id, amount) => {
     var options = {
       description: '',
       image: 'https://i.imgur.com/3g7nmJC.jpg',
       currency: 'INR',
       key: 'rzp_test_KZ2Pqe1bSdWymA',
-      amount: amount*100,
+      amount: amount * 100,
       name: 'CollegeXplorer',
-      order_id: '',//Replace this with an order_id created using Orders API.
+      order_id: '', //Replace this with an order_id created using Orders API.
       prefill: {
         email: `${user.email}`,
         contact: '9191919191',
         name: `${user.name}`,
       },
-      theme: {color: '#53a20e'}
-    }
-    RazorpayCheckout.open(options).then((data) => {
-          updateOrder(id).then(res => {
-      getOrders(user._id).then(res => {
-        console.log(res.data[1].items);
-        setOrders(res.data);
+      theme: {color: '#53a20e'},
+    };
+    RazorpayCheckout.open(options)
+      .then(data => {
+        updateOrder(id).then(res => {
+          getOrders(user._id).then(res => {
+            console.log(res.data[1].items);
+            setOrders(res.data);
+          });
+        });
+      })
+      .catch(error => {
+        Alert(`Error: ${error.code} | ${error.description}`);
       });
-    });
-     
-    }).catch((error) => {
-     
-      Alert(`Error: ${error.code} | ${error.description}`);
-    });
-
   };
 
   return (
@@ -91,12 +87,27 @@ export const OrderScreen = () => {
                     );
                   })}
 
-                  <Text style={{color: '#000'}}>status: {item.status}</Text>
+                  <Text style={{color: '#000'}}>
+                    status:{' '}
+                    <Text
+                      style={{
+                        color:
+                          item.status == 'accepted' ? '#0D9276' : '#E8751A',
+                      }}>
+                      {item.status}
+                    </Text>{' '}
+                  </Text>
                   {!item.isOrderComplete ? (
                     <TouchableOpacity
                       // disabled={item.status != 'accepted'}
-                      style={[styles.icon, {backgroundColor: '#68BA6A'}]}
-                      onPress={() => doPayment(item._id,price)}>
+                      style={[
+                        styles.icon,
+                        {
+                          backgroundColor:
+                            item.status !== 'accepted' ? '#A9A9A9' : '#68BA6A',
+                        },
+                      ]}
+                      onPress={() => doPayment(item._id, price)}>
                       <Text style={[styles.iconText, {color: '#fff'}]}>
                         Pay {price}
                       </Text>
@@ -160,7 +171,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   icon: {
-    width: '90%',
+    width: '95%',
     marginLeft: 'auto',
     marginRight: 'auto',
     marginTop: 10,

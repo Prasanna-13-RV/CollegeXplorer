@@ -43,13 +43,14 @@ const LoginScreenStudent = () => {
 
   
   disableSocialButtons
+
   textInputChildren={
     <View style={{marginTop: 16}}>
-      <TextInput
+      {/* <TextInput
         placeholder="Re-Password"
         secureTextEntry
         onChangeText={setRepassword}
-      />
+      /> */}
     </View>
   }
   onPasswordChange={setPassword}

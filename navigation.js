@@ -17,15 +17,23 @@ import Selfie from './screens/attendance/Selfie';
 import LoginScreenStudent from './screens/auth/LoginScreenStudent';
 import {SignupScreenStudent} from './screens/auth/SignupScreenStudent';
 
-import { OrderScreen } from './screens/food/OrderScreen';
+import {OrderScreen} from './screens/food/OrderScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import StudentProfile from './screens/auth/StudentProfile';
+import NotesScreen from './screens/notes/NotesScreen';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login">
-      <Stack.Screen name="BottomTabNavigator" component={BottomTabNavigator} options={{headerShown: false}} />
+        <Stack.Screen
+          name="BottomTabNavigator"
+          component={drawerNav}
+          options={{headerShown: false}}
+        />
 
         {/* auth */}
         <Stack.Screen name="Login" component={LoginScreenStudent} />
@@ -82,8 +90,47 @@ export default function Navigation() {
         {/* attendance */}
         <Stack.Screen name="Maps" component={Maps} />
         <Stack.Screen name="Selfie" component={Selfie} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+
+const drawerNav = () => {
+  return (
+
+    <Drawer.Navigator
+           drawerType="front"
+           initialRouteName="Home"
+           drawerContentOptions={{
+             activeTintColor: '#e91e63',
+             itemStyle: { marginVertical: 10 },
+           }}
+      
+    
+    >
+           
+            <Drawer.Screen
+            key={"Orders"}
+            name={"Orders"} 
+            component={OrderScreen}  
+            />
+            <Drawer.Screen
+            key={"Home"}
+            name={"Home"} 
+            component={BottomTabNavigator}  
+            />
+             <Drawer.Screen
+            key={"Profile"}
+            name={"Profile"} 
+            component={StudentProfile}  
+            />
+            <Drawer.Screen
+            key={"Notes"}
+            name={"Notes"} 
+            component={NotesScreen}  
+            />
+           
+    </Drawer.Navigator>
+ 
+     );
+};
