@@ -5,10 +5,8 @@ import HomeScreen from './screens/food/HomeScreen';
 import ResturantScreen from './screens/food/ResturantScreen';
 import CartScreen from './screens/food/CartScreen';
 import PreparingOrderScreen from './screens/food/PreparingOrderScreen';
-import DeliveryScreen from './screens/food/DeliveryScreen';
 import PreparingProductScreen from './screens/stationery/PreparingProductScreen';
 import StationeryCartScreen from './screens/stationery/StationeryCartScreen';
-import StationeryDeliveryScreen from './screens/stationery/StationeryDeliveryScreen';
 import StationeryHomeScreen from './screens/stationery/StationeryHomeScreen';
 import StationeryShopScreen from './screens/stationery/StationeryShopScreen';
 import BottomTabNavigator, {MyTabBar} from './screens/navigation/MyTabBar';
@@ -40,7 +38,7 @@ export default function Navigation() {
         <Stack.Screen name="Signup" component={SignupScreenStudent} />
 
         {/* food */}
-        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Buy" component={HomeScreen} />
         <Stack.Screen name="Resturant" component={ResturantScreen} />
         <Stack.Screen
           name="Cart"
@@ -54,12 +52,7 @@ export default function Navigation() {
         />
         <Stack.Screen name="Orders" component={OrderScreen} />
 
-        <Stack.Screen
-          name="Delivery"
-          options={{presentation: 'fullScreenModal', headerShown: false}}
-          component={DeliveryScreen}
-        />
-
+      
         {/* stationery */}
         <Stack.Screen
           name="PreparingProductScreen"
@@ -71,11 +64,7 @@ export default function Navigation() {
           options={{presentation: 'fullScreenModal', headerShown: false}}
           component={StationeryCartScreen}
         />
-        <Stack.Screen
-          name="StationeryDeliveryScreen"
-          options={{presentation: 'fullScreenModal', headerShown: false}}
-          component={StationeryDeliveryScreen}
-        />
+       
         <Stack.Screen
           name="StationeryHomeScreen"
           options={{presentation: 'fullScreenModal', headerShown: false}}
@@ -100,7 +89,7 @@ const drawerNav = () => {
 
     <Drawer.Navigator
            drawerType="front"
-           initialRouteName="Home"
+           initialRouteName="Attendance"
            drawerContentOptions={{
              activeTintColor: '#e91e63',
              itemStyle: { marginVertical: 10 },
@@ -108,15 +97,24 @@ const drawerNav = () => {
       
     
     >
-           
+       <Drawer.Screen
+            key={"Attendance"}
+            name={"Attendance"} 
+            component={Selfie}  
+            />
+           <Drawer.Screen
+            key={"Notes"}
+            name={"Notes"} 
+            component={NotesScreen}  
+            />
             <Drawer.Screen
             key={"Orders"}
             name={"Orders"} 
             component={OrderScreen}  
             />
             <Drawer.Screen
-            key={"Home"}
-            name={"Home"} 
+            key={"Buy"}
+            name={"Buy"} 
             component={BottomTabNavigator}  
             />
              <Drawer.Screen
@@ -124,11 +122,7 @@ const drawerNav = () => {
             name={"Profile"} 
             component={StudentProfile}  
             />
-            <Drawer.Screen
-            key={"Notes"}
-            name={"Notes"} 
-            component={NotesScreen}  
-            />
+            
            
     </Drawer.Navigator>
  

@@ -11,16 +11,15 @@ import {
   ScrollView,
 } from 'react-native';
 import * as yup from 'yup';
-import { createUser } from '../../axios/auth';
-import { setUser } from '../../slices/userSlice';
-import { useDispatch } from 'react-redux';
+import {createUser} from '../../axios/auth';
+import {setUser} from '../../slices/userSlice';
+import {useDispatch} from 'react-redux';
 
 const validationSchema = yup.object().shape({
-    name: yup.string().required('Name is required'),
-    email: yup.string().required('Email is required'),
-    registerNo: yup.string().required('Register Number is required'),
-    password: yup.string().required('Password is required'),
-
+  name: yup.string().required('Name is required'),
+  email: yup.string().required('Email is required'),
+  registerNo: yup.string().required('Register Number is required'),
+  password: yup.string().required('Password is required'),
 });
 
 export const SignupScreenStudent = () => {
@@ -30,20 +29,20 @@ export const SignupScreenStudent = () => {
   const handleRegister = values => {
     console.log('values', values);
     try {
-        createUser(values).then((res)=>{
-            dispatch(
-              setUser({
-                _id:res.data._id,
-               name:res.data.name,
-               email:res.data.email,
-               registerNumber:res.data.registerNumber,
-               className:res.data.className
-               
-              }),
-            );
-            navigation.navigate("BottomTabNavigator")
-      
-          })
+      createUser(values).then(res => {
+        console.log(res);
+        dispatch(
+          setUser({
+            _id: res.data._id,
+            name: res.data.name,
+            email: res.data.email,
+            registerNumber: res.data.registerNumber,
+            className: res.data.className,
+            userImage: res.data.userImage,
+          }),
+        );
+        navigation.navigate('BottomTabNavigator');
+      });
     } catch (e) {
       console.log('Error', e);
     }
@@ -63,8 +62,7 @@ export const SignupScreenStudent = () => {
             name: '',
             email: '',
             registerNo: '',
-            password: ''
-            
+            password: '',
           }}
           validationSchema={validationSchema}
           onSubmit={handleRegister}>
@@ -122,7 +120,7 @@ export const SignupScreenStudent = () => {
                   style={styles.input}
                   value={values.registerNo}
                   onChangeText={handleChange('registerNo')}
-                  placeholder="Enter Shop Name"
+                  placeholder="Enter Register Number"
                 />
                 {touched.registerNo && errors.registerNo && (
                   <Text style={styles.errorText}>{errors.registerNo}</Text>
@@ -143,15 +141,12 @@ export const SignupScreenStudent = () => {
                 )}
               </View>
 
-
-
               <TouchableOpacity
                 style={styles.registerButton}
                 onPress={handleSubmit}>
                 <Text style={styles.registerButtonText}>Sign up</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Login')}>
+              <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                 <Text style={styles.loginLinkText}>
                   Already have an account
                 </Text>
@@ -172,13 +167,7 @@ const styles = StyleSheet.create({
   formContainer: {
     width: '80%',
   },
-  input: {
-    height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 16,
-    paddingLeft: 10,
-  },
+
   registerButton: {
     backgroundColor: '#3498db',
     padding: 10,
@@ -198,5 +187,20 @@ const styles = StyleSheet.create({
     color: '#3498db',
     margin: 10,
     textAlign: 'center',
+  },
+
+  input: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 16,
+    paddingLeft: 10,
+    color:"#000000",
+    placeholderTextColor: '#000000'
+
+
+  },
+  label: {
+    color:"#000000"
   },
 });

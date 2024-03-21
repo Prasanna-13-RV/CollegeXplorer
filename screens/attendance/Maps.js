@@ -17,11 +17,12 @@ const Maps = ({route}) => {
 
   const studentInOrOut = async () => {
     console.log(latitude, longitude);
+   
     if (
-      latitude > 36 &&
-      latitude < 40 &&
-      longitude > -121 &&
-      longitude < -122
+      latitude > 10 &&
+      latitude < 14 &&
+      longitude > 78 &&
+      longitude < 82
     ) {
       setMessage('Student inside the college');
       createAttendance(user._id,true,picture)

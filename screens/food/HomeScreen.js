@@ -14,32 +14,35 @@ import FeatureRow from '../../components/featuredRow';
 // import { getFeaturedResturants } from '../api';
 import * as Icon from 'react-native-feather';
 import {themeColors} from '../../theme';
-import { getShops } from '../../axios/shop';
+import {getShops} from '../../axios/shop';
 export default function HomeScreen() {
   const [featuredCategories, setFeaturedCategories] = useState([]);
-const [snacks, setSnacks] = useState([]);
-const [lunch, setLunch] = useState([]);
+  const [snacks, setSnacks] = useState([]);
+  const [lunch, setLunch] = useState([]);
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({headerShown: false});
   }, []);
-  useEffect(()=>{
-      getShops().then(res=>{
+  useEffect(() => {
+    initShops()
+  }, []);
 
-        
-        const filteredSnacks = res.data.filter(item => {
-          return item.products.some(product => product.productType == 'snacks');      
+
+  const initShops = () => {
+    getShops().then(res => {
+      const filteredSnacks = res.data.filter(item => {
+        return item.products.some(product => product.productType == 'snacks');
       });
-      console.log(filteredSnacks,"sssssssss");
-      setSnacks(filteredSnacks)
-      
-        const filteredLunch = res.data.filter(item => {
-          return item.products.some(product => product.productType == 'lunch');      });
-      setLunch(filteredLunch);
+      console.log(filteredSnacks, 'sssssssss');
+      setSnacks(filteredSnacks);
 
-      })
-  
-},[])
+      const filteredLunch = res.data.filter(item => {
+        return item.products.some(product => product.productType == 'lunch');
+      });
+      setLunch(filteredLunch);
+    });
+  }
+
   useEffect(() => {
     const categories = [
       {
@@ -137,17 +140,35 @@ const [lunch, setLunch] = useState([]);
     // })
   }, []);
 
+  const handleSearch = value => {
+    if(value == ""){
+      initShops()
+    }
+
+
+    setSnacks(
+      snacks.filter(item => {
+        return item.products.some(product => product.productName.toLowerCase().includes(value.toLowerCase()));
+      })
+    );
+    setLunch(
+      lunch.filter(item => {
+        return item.products.some(product => product.productName.toLowerCase().includes(value.toLowerCase()));
+      })
+    );
+  };
+
   return (
     <SafeAreaView className="bg-white">
-      
       <StatusBar barStyle="dark-content" />
       {/* search bar */}
       <View className="flex-row items-center space-x-2 px-4 pb-2 ">
         <View className="flex-row flex-1 items-center p-3 rounded-full border border-gray-300">
           <Icon.Search height="25" width="25" stroke="gray" />
           <TextInput
-            placeholder="Resturants"
-            className="ml-2 flex-1"
+            onChangeText={e => handleSearch(e)}
+            placeholder="Search any food"
+            className="ml-2 flex-1 text-[#000000]"
             keyboardType="default"
           />
           <View className="flex-row items-center space-x-1 border-0 border-l-2 pl-2 border-l-gray-300">
@@ -176,28 +197,18 @@ const [lunch, setLunch] = useState([]);
         {/* categories */}
         {/* <Categories /> */}
 
-
         {/* featured */}
         <View className="mt-5">
-          
-           
-              <FeatureRow
-                
-               
-                title={"Snacks"}
-                items={snacks}
-                description={"Snack items are availble in these shops"}
-                
-              />
-               <FeatureRow
-                
-            
-                title={"Lunch"}
-                items={lunch}
-                description={"Lunch items are availble in these shops"}
-              />
-            
-          
+          <FeatureRow
+            title={'Snacks'}
+            items={snacks}
+            description={'Snack items are availble in these shops'}
+          />
+          <FeatureRow
+            title={'Lunch'}
+            items={lunch}
+            description={'Lunch items are availble in these shops'}
+          />
         </View>
       </ScrollView>
     </SafeAreaView>

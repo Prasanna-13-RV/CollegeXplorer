@@ -56,7 +56,7 @@ export default function BasketScreen() {
     const prodId = Object.keys(groupedItems)[0];
     const shop = groupedItems[prodId][0].shop;
     createOrder(user._id, result,shop).then(res => {
-      navigation.navigate('PreparingOrder');
+      navigation.navigate('Orders');
     });
   };
   
@@ -77,20 +77,15 @@ export default function BasketScreen() {
       </View>
 
       {/* delivery time */}
-      <View
+      {/* <View
         style={{backgroundColor: themeColors.bgColor(0.2)}}
         className="flex-row px-4 items-center">
         {/* <Image
           source={require('../assets/images/bikeGuy.png')}
           className="w-20 h-20 rounded-full"
         /> */}
-        <Text className="flex-1 pl-4">Deliver in 20-30 minutes</Text>
-        <TouchableOpacity>
-          <Text style={{color: themeColors.text}} className="font-bold">
-            Change
-          </Text>
-        </TouchableOpacity>
-      </View>
+        {/* <Text className="flex-1 pl-4">Deliver in 20-30 minutes</Text> */}
+        
 
       {/* dishes */}
       <ScrollView
@@ -142,8 +137,8 @@ export default function BasketScreen() {
         </View>
         
         <View className="flex-row justify-between">
-          <Text className="font-extrabold">Order Total</Text>
-          <Text className="font-extrabold">₹{basketTotal}</Text>
+          <Text className="font-extrabold text-gray-700">Order Total</Text>
+          <Text className="font-extrabold text-gray-700">₹{basketTotal}</Text>
         </View>
         <View>
           <TouchableOpacity

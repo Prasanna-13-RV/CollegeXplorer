@@ -77,7 +77,6 @@ const BottomTabNavigator = () => {
     <Tab.Navigator tabBar={props => <MyTabBar {...props} />}>
       <Tab.Screen name="Food" component={HomeScreen} />
       <Tab.Screen name="Stationery" component={StationeryHomeScreen} />
-      <Tab.Screen name="Attendance" component={Selfie} />
     </Tab.Navigator>
   );
 };

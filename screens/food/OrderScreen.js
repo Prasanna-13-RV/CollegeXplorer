@@ -21,19 +21,8 @@ export const OrderScreen = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      () => {
-        navigation.navigate('BottomTabNavigator');
-        return true; // Prevent default back button behavior
-      },
-    );
 
-    getOrders(user._id).then(res => {
-      console.log(res.data[1].items);
-      setOrders(res.data);
-    });
-    return () => backHandler.remove();
+                        
   }, []);
 
   const doPayment = (id, amount) => {
@@ -99,7 +88,7 @@ export const OrderScreen = () => {
                   </Text>
                   {!item.isOrderComplete ? (
                     <TouchableOpacity
-                      // disabled={item.status != 'accepted'}
+                      disabled={item.status != 'accepted'}
                       style={[
                         styles.icon,
                         {
@@ -110,7 +99,7 @@ export const OrderScreen = () => {
                       onPress={() => doPayment(item._id, price)}>
                       <Text style={[styles.iconText, {color: '#fff'}]}>
                         Pay {price}
-                      </Text>
+                      </Text>   
                     </TouchableOpacity>
                   ) : (
                     <Text style={{color: '#000'}}>Paid</Text>

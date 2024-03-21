@@ -9,6 +9,7 @@ import {
   Image,
   TextInput,
   Alert,
+  PermissionsAndroid,
 } from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -16,11 +17,24 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import axios from 'axios';
 import {selectUser, setUser} from '../../slices/userSlice';
 import {PERMISSIONS, request} from 'react-native-permissions';
+import {Navigation} from 'react-native-feather';
+import {useNavigation} from '@react-navigation/native';
+import {Cloudinary} from "@cloudinary/url-gen";
+import { launchCamera } from 'react-native-image-picker';
 
 export default function StudentProfile() {
   const user = useSelector(selectUser);
   let dispatch = useDispatch();
-
+  const navigation = useNavigation();
+  const cld = new Cloudinary({
+    cloud: {
+        cloudName: 'dqx0eyiow'
+    },
+    
+    url: {
+        secure: true
+    }
+}); 
   const [userDetails, setUserDetails] = useState(user);
   const [imageUrl, setImageUrl] = useState(user.userImage);
 
@@ -60,81 +74,97 @@ export default function StudentProfile() {
     }
   };
 
-  const uploadToCloudinary = async (imagePath, fileName, type) => {
+  const uploadToCloudinary = async (imagePath,fileName,type) => {
     try {
-      const data = new FormData();
-      data.append('file', {uri: imagePath, type: type, name: fileName}),
-        data.append('upload_preset', 'student');
-      data.append('cloud_name', 'dqx0eyiow');
-
-      const response = await fetch(
-        'https://api.cloudinary.com/v1_1/dqx0eyiow/image/upload',
-        {
-          method: 'POST',
-          body: data,
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Failed to upload image to Cloudinary');
-      }
-
-      const json = await response.json();
-      return json.secure_url;
-      // This will be the URL of the uploaded image
+  const data = new FormData()
+  data.append("file",{uri:imagePath,type:type,name:fileName}),
+  data.append("upload_preset","student")
+  data.append("cloud_name","dqx0eyiow")
+     
+    
+    
+  const response = await fetch("https://api.cloudinary.com/v1_1/dqx0eyiow/image/upload", {
+    method: "POST",
+    body: data
+  });
+  
+  if (!response.ok) {
+    throw new Error('Failed to upload image to Cloudinary');
+  }
+           
+  const json = await response.json();
+  return json.secure_url;
+        // This will be the URL of the uploaded image
     } catch (error) {
-      console.error('Error uploading image to Cloudinary:', error);
-      throw error;
+        console.error('Error uploading image to Cloudinary:', error);
+        throw error;
     }
   };
 
-  const handleImageUpload = async () => {
-    try {
-      // Check and request permissions for accessing the camera and gallery
-      const permissionResult = await request(
-        Platform.select({
-          android: PERMISSIONS.ANDROID.READ_EXTERNAL_STORAGE,
-        }),
-      );
-
-      if (permissionResult !== 'granted') {
-        Alert.alert(
-          'Permission denied',
-          'Please grant permission to access photos',
+    const requestCameraPermission = async () => {
+      try {
+        const CAMERA_PERMISSION_REQUEST_CODE = 123;
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+          {
+            title: 'Cool Photo App Camera Permission',
+            message:
+              'Cool Photo App needs access to your camera ' +
+              'so you can take awesome pictures.',
+            buttonNeutral: 'Ask Me Later',
+            buttonNegative: 'Cancel',
+            buttonPositive: 'OK',
+            requestCode: CAMERA_PERMISSION_REQUEST_CODE,
+          },
         );
-        return;
-      }
-
-      // Configure image picker options
-      const options = {
-        title: 'Select Image',
-        storageOptions: {
-          skipBackup: true,
-          path: 'images',
-        },
-      };
-
-      // Launch image picker
-      ImagePicker.showImagePicker(options, async response => {
-        if (response.didCancel) {
-          console.log('User cancelled image picker');
-        } else if (response.error) {
-          console.log('ImagePicker Error: ', response.error);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          const result = await launchCamera({
+            mediaType: 'photo',
+            cameraType: 'font',
+          });
+          console.log('Camera result:', result);
+          
+      
+      
+  
+          const img = await uploadToCloudinary(result?.assets[0].uri,result?.assets[0].fileName,result?.assets[0].type)
+          setImageUrl(img);
+          try {
+            axios
+              .put(
+                `https://busy-ruby-snail-boot.cyclic.app/api/user/updateimage/${user._id}`,
+                {img:img}
+              )
+              .then(res => {
+                console.log(res.data,"cam");
+                
+                dispatch(
+                  setUser({
+                    _id: res.data._id,
+                    name: res.data.name,
+                    email: res.data.email,
+                    registerNumber: res.data.registerNumber,
+                    className: res.data.className,
+                    userImage:res.data.userImage
+                  }),
+                );
+                Alert('Success', 'Profile updated successfully');
+              });
+          } catch (e) {
+            console.log(e);
+          }
+        
         } else {
-          // Upload image to Cloudinary
-          const uploadedImageUrl = await uploadToCloudinary(
-            response.uri,
-            response.fileName,
-            response.type,
-          );
-          setImageUrl(uploadedImageUrl);
+          console.log('Camera permission denied');
         }
-      });
-    } catch (error) {
-      console.error('Error handling image upload:', error);
-    }
+      } catch (err) {
+        console.warn(err);
+      }
+    };
+  const handleLogOut = () => {
+    dispatch(setUser(null));
+    navigation.navigate('Login');
   };
-
   return (
     <SafeAreaView
       style={{flex: 1, backgroundColor: '#f6f6f6', paddingHorizontal: 15}}>
@@ -143,14 +173,12 @@ export default function StudentProfile() {
         <View style={styles.profile}>
           <View style={styles.profileTop}>
             <View style={styles.avatar}>
-              <TouchableOpacity onPress={handleImageUpload}>
+              <TouchableOpacity onPress={()=>requestCameraPermission()}>
                 <Image
                   alt=""
                   source={{
                     uri:
-                      imageUrl ||
-                      'https://imgv3.fotor.com/images/blog-richtext-image/10-profile-picture-ideas-to-make-you-stand-out.jpg',
-                  }}
+                      imageUrl }}
                   style={styles.avatarImg}
                 />
               </TouchableOpacity>
@@ -177,6 +205,14 @@ export default function StudentProfile() {
           <View style={styles.profileAction}>
             <Text style={styles.profileActionText}>Edit Profile</Text>
             <FeatherIcon color="#fff" name="edit-3" size={16} />
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => {
+            handleLogOut();
+          }}>
+          <View style={[styles.profileAction]}>
+            <Text style={styles.profileActionText}>Log out</Text>
           </View>
         </TouchableOpacity>
       </View>

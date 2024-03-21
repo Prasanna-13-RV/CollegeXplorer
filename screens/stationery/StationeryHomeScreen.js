@@ -24,10 +24,25 @@ export default function StationeryHomeScreen() {
     navigation.setOptions({headerShown: false});
   }, []);
   useEffect(() => {
+   initShops()
+  }, []);
+
+  const initShops = () => {
     getShops().then(res => {
       setStationery(res.data.filter(item => item.shopType == 'stationery'));
     });
-  }, []);
+  }
+
+  const handleSearch = (value) => {
+    if(value==""){
+      initShops()
+    } 
+    setStationery(
+      stationery.filter(item => {
+        return item.products.some(product => product.productName.toLowerCase().includes(value.toLowerCase()));
+      })
+    );
+  }
   useEffect(() => {
     const categories = [
       {
@@ -133,8 +148,9 @@ export default function StationeryHomeScreen() {
         <View className="flex-row flex-1 items-center p-3 rounded-full border border-gray-300">
           <Icon.Search height="25" width="25" stroke="gray" />
           <TextInput
-            placeholder="Resturants"
-            className="ml-2 flex-1"
+          onChangeText={e=>handleSearch(e)}
+            placeholder="Seach for products..."
+            className="ml-2 flex-1 text-[#000000]"
             keyboardType="default"
           />
           <View className="flex-row items-center space-x-1 border-0 border-l-2 pl-2 border-l-gray-300">

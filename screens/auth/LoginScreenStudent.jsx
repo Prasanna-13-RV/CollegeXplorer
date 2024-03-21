@@ -26,7 +26,8 @@ const LoginScreenStudent = () => {
          name:res.data.name,
          email:res.data.email,
          registerNumber:res.data.registerNumber,
-         className:res.data.className
+         className:res.data.className,
+         userImage:res.data.userImage
          
         }),
       );
@@ -41,6 +42,7 @@ const LoginScreenStudent = () => {
   loginButtonText={'Login'}
   signupText='Create an Account'
 
+  signupTextStyle={{color:"#31363F"}}
   
   disableSocialButtons
 
